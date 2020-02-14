@@ -38,3 +38,5 @@ if [ "$GZIP" == "true" ]; then
     sed -i 's/compression="off"/compression="on"/g' /home/app/config/server.xml
 fi
 mv -v /home/app/config/server.xml ${TOMCAT_HOME}/conf/server.xml
+echo "Replace sites configuration"
+mv -v /home/app/config/opencms-sites.xml ${TOMCAT_HOME}/conf/opencms-sites.xml

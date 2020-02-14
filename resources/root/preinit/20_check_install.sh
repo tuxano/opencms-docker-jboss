@@ -9,6 +9,51 @@ JAR_NAMES_PROPERTIES="OPENCMS_CORE_LIBS=$JAR_NAMES"
 JAR_NAMES_PROPERTIES_FILE=${ARTIFACTS_FOLDER}libs/core-libs.properties
 echo "$JAR_NAMES_PROPERTIES" > $JAR_NAMES_PROPERTIES_FILE
 
+echo "make WEB-INF"
+if [ ! -d ${OPENCMS_HOME}/WEB-INF/]; then
+	mkdir -v -p ${OPENCMS_HOME}/WEB-INF/
+fi
+
+echo ""
+echo "---------------------------------------"
+ls -la ${APP_HOME}data/
+echo "---------------------------------------"
+echo ""
+echo "make dir"
+if [ ! -d ${APP_HOME}data/lib/ ]; then
+	mkdir -v -p ${APP_HOME}data/lib/
+fi
+echo "---- lib"
+if [ ! -d ${APP_HOME}data/config/ ]; then
+	mkdir -v -p ${APP_HOME}data/config/
+fi
+echo "---- config"
+
+echo "link to volume"
+ln -s ${APP_HOME}data/lib/ ${OPENCMS_HOME}/WEB-INF/
+echo "---- lib"
+ln -s ${APP_HOME}data/config/ ${OPENCMS_HOME}/WEB-INF/
+echo "---- config"
+
+echo ""
+echo "---------------------------------------"
+id
+echo "---------------------------------------"
+echo ""
+
+echo ""
+echo "---------------------------------------"
+ls -la ${APP_HOME}data
+ls -la ${APP_HOME}data/lib/
+echo "---------------------------------------"
+echo ""
+
+echo ""
+echo "---------------------------------------"
+ls ${OPENCMS_HOME}/WEB-INF/lib/opencms.jar
+echo "---------------------------------------"
+echo ""
+
 if [ -f "${OPENCMS_HOME}/WEB-INF/lib/opencms.jar" ]
 then
 	echo "OpenCms already installed, updating modules and libs"

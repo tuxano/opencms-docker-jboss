@@ -12,11 +12,9 @@ MAINTAINER Alkacon Software GmbH
 USER root
 ENV APP_HOME=/home/app/
 ENV APP_USER=app
-#ENV APP_GROUP=root
 RUN mkdir -p ${APP_HOME}
 
-#RUN groupadd -r ${APP_GROUP} && useradd -r -g ${APP_GROUP} -d ${APP_HOME} -s /sbin/nologin -c "Docker User" ${APP_USER} && chown -R ${APP_USER}:${APP_USER} ${APP_HOME}
-RUN useradd -r -g 0 -d ${APP_HOME} -s /sbin/nologin -c "Docker User" ${APP_USER} && chown -R ${APP_USER}:0 ${APP_HOME}
+RUN useradd -r -g 0 -d ${APP_HOME} -s /sbin/nologin -c "Docker User" ${APP_USER} && chown -R ${APP_USER}:0 ${APP_HOME} && chmod -R g+rw ${APP_HOME}
 
 # Variables used in the shell scripts loaded from the file system
 ENV TOMCAT_HOME=/opt/jws-5.2/tomcat
@@ -46,15 +44,19 @@ COPY resources ${APP_HOME}
 RUN chmod +x ${APP_HOME}root/*.sh && \
     chown -R ${APP_USER}:0 ${TOMCAT_HOME} && \
     chown -R ${APP_USER}:0 ${APP_HOME} && \
+    chown -R ${APP_USER}:0 /home/jboss && \
     chmod -R g+rw ${TOMCAT_HOME} && \
-    chmod -R g+rw ${APP_HOME}
- 
-USER ${APP_USER}
- 
-VOLUME ${WEBAPPS_HOME}
-
-RUN bash ${APP_HOME}root/opencms-fetch.sh && \
+    chmod -R g+rw ${APP_HOME} && \
+    chmod -R g+rw /home/jboss && \
     rm -rf ${WEBAPPS_HOME}/*
+    
+RUN mkdir -p ${APP_HOME}data && chown -R ${APP_USER}:0 ${APP_HOME}data && chmod -R g+rw ${APP_HOME}data
+ 
+VOLUME ${APP_HOME}data
+
+USER ${APP_USER}
+
+RUN bash ${APP_HOME}root/opencms-fetch.sh
 
 # Expose port 8080 for Tomcat and define the startup script
 EXPOSE 8080
