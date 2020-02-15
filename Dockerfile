@@ -14,7 +14,7 @@ ENV APP_HOME=/home/app/
 ENV APP_USER=app
 RUN mkdir -p ${APP_HOME}
 
-RUN useradd -r -g 0 -d ${APP_HOME} -s /sbin/nologin -c "Docker User" ${APP_USER} && chown -R ${APP_USER}:0 ${APP_HOME} && chmod -R g+rw ${APP_HOME}
+RUN useradd -r -g 0 -d ${APP_HOME} -s /sbin/nologin -c "Docker User" ${APP_USER} 
 
 # Variables used in the shell scripts loaded from the file system
 ENV TOMCAT_HOME=/opt/jws-5.2/tomcat
@@ -41,6 +41,8 @@ ENV TOMCAT_LIB=${TOMCAT_HOME}/lib \
 # Create the setup configuration file
 COPY resources ${APP_HOME}
 
+RUN mkdir -p ${APP_HOME}data && mkdir -p ${ARTIFACTS_FOLDER}libs
+
 RUN chmod +x ${APP_HOME}root/*.sh && \
     chown -R ${APP_USER}:0 ${TOMCAT_HOME} && \
     chown -R ${APP_USER}:0 ${APP_HOME} && \
@@ -50,8 +52,6 @@ RUN chmod +x ${APP_HOME}root/*.sh && \
     chmod -R g+rw /home/jboss && \
     rm -rf ${WEBAPPS_HOME}/*
     
-RUN mkdir -p ${APP_HOME}data && chown -R ${APP_USER}:0 ${APP_HOME}data && chmod -R g+rw ${APP_HOME}data
- 
 VOLUME ${APP_HOME}data
 
 USER ${APP_USER}
