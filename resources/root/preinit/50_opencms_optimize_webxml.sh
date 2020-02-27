@@ -47,9 +47,9 @@ else
 
     sed -i "/<display-name>OpenCms<\/display-name>/ r ${CONFIG_TMPFILE}" "${CONFIG_WEBXML}"
 
-    echo ""
-    echo "Modified web.xml configuration looks like this:" 
-    echo "================================================================================================="
-    cat "${CONFIG_WEBXML}"
+    #echo ""
+    #echo "Modified web.xml configuration looks like this:" 
+    #echo "================================================================================================="
+    #cat "${CONFIG_WEBXML}"
     echo ""
 fi
